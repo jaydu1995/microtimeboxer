@@ -63,7 +63,7 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
     }
   };
 
-  const stopTimer = () => {
+  const pauseTimer = () => {
     setIsRunning(false);
     timer?.pause();
   };
@@ -80,8 +80,8 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
       <button onClick={startTimer} disabled={isRunning || duration === 0}>
         Start
       </button>
-      <button onClick={stopTimer} disabled={!isRunning}>
-        Stop
+      <button onClick={pauseTimer} disabled={!isRunning}>
+        Pause
       </button>
       <button onClick={handleRoll} disabled={isRunning}>
         Roll
