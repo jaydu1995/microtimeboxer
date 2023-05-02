@@ -77,12 +77,16 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   return (
     <div>
       <Time milliseconds={duration} format={"MM:SS"} />
-      <button onClick={startTimer} disabled={isRunning || duration === 0}>
-        Start
-      </button>
-      <button onClick={pauseTimer} disabled={!isRunning}>
-        Pause
-      </button>
+      {!isRunning ? (
+        <button onClick={startTimer} disabled={isRunning || duration === 0}>
+          Start
+        </button>
+      ) : (
+        <button onClick={pauseTimer} disabled={!isRunning}>
+          Pause
+        </button>
+      )}
+
       <button onClick={handleRoll} disabled={isRunning}>
         Roll
       </button>
