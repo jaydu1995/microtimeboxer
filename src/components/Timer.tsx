@@ -7,6 +7,7 @@ import WorkerTimerClass from "@/utils/WorkerTimer";
 import TimerClass from "@/utils/TimerClass";
 import randomNum from "@/utils/randomNum";
 import formatMS from "@/utils/formatMS";
+import { Button, ButtonGroup } from "@chakra-ui/react";
 
 export interface TimerProps {
   updateTitleDuration?: Dispatch<SetStateAction<string>>;
@@ -75,21 +76,41 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   };
 
   return (
-    <div>
+    <div style={{ textAlign: 'center' }}>
       <Time milliseconds={duration} format={"MM:SS"} />
-      {!isRunning ? (
-        <button onClick={startTimer} disabled={isRunning || duration === 0}>
-          Start
-        </button>
-      ) : (
-        <button onClick={pauseTimer} disabled={!isRunning}>
-          Pause
-        </button>
-      )}
+      <ButtonGroup spacing={3} >
+        {!isRunning ? (
+          <Button
+            size="lg"
+            colorScheme="teal"
+            variant="solid"
+            onClick={startTimer}
+            isDisabled={isRunning || duration === 0}
+          >
+            Start
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            colorScheme="red"
+            variant="solid"
+            onClick={pauseTimer}
+            isDisabled={!isRunning}
+          >
+            Pause
+          </Button>
+        )}
 
-      <button onClick={handleRoll} disabled={isRunning}>
-        Roll
-      </button>
+        <Button
+          size="lg"
+          colorScheme="teal"
+          variant="outline"
+          onClick={handleRoll}
+          isDisabled={isRunning}
+        >
+          Roll
+        </Button>
+      </ButtonGroup>
     </div>
   );
 }
