@@ -1,4 +1,5 @@
 import formatMS, { TimeFormat } from "@/utils/formatMS";
+import { Text } from '@chakra-ui/react'
 
 interface TimeProps {
   milliseconds: number;
@@ -18,7 +19,9 @@ export default function Time({ milliseconds, format }: TimeProps) {
 
   return (
     <div className="time" data-time-ms={milliseconds}>
-      {formatMS(milliseconds, format)}
+      <Text fontFamily='mono' fontSize='6xl'>
+        {formatMS(milliseconds, format)}
+      </Text>
     </div>
   );
 }
