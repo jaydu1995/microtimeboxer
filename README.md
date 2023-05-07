@@ -1,7 +1,7 @@
 # Microtimeboxer
 
 ## Features
-Right now the app is its earliest stage of development, as such the only feature available is the ability to receive a random timer between 1 and 6 minutes.
+Right now the app is in it's earliest stage of development, as such the only feature available is the ability to receive a random timer between 1 and 6 minutes.
 
 ## Roadmap
 The following will not necessarily be completed in order:
