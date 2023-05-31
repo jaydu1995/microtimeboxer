@@ -8,6 +8,8 @@ import TimerClass from "@/utils/TimerClass";
 import randomNum from "@/utils/randomNum";
 import formatMS from "@/utils/formatMS";
 import { Button, ButtonGroup } from "@chakra-ui/react";
+import CustomRangeForm from "./CustomRangeForm";
+import { TimerRange } from "./TimerRangeSchema";
 
 export interface TimerProps {
   updateTitleDuration?: Dispatch<SetStateAction<string>>;
@@ -18,15 +20,21 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   const [isRunning, setIsRunning] = useState(false);
   const [duration, setDuration] = useState(180000);
   const [timer, setTimer] = useState<TimerClass | null>(null);
+  const [range, setRange] = useState<TimerRange>({ min: 1, max: 6 });
+  const [rangeFormDisplayed, setRangeFormDisplayed] = useState(false);
   const [playAlarm] = useSound(alarm);
 
-  const generateRandomDuration = () => {
-    return randomNum(60000, 360000, 60000);
+  const generateRandomDuration = ({ min, max }: TimerRange) => {
+    return randomNum(min * 60000, max * 60000, 60000);
   };
 
   useEffect(() => {
-    setDuration(generateRandomDuration());
+    setDuration(generateRandomDuration(range));
   }, []);
+
+  useEffect(() => {
+    handleRoll();
+  }, [range]);
 
   const initializeTimer = () => {
     let newTimer;
@@ -70,15 +78,34 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   };
 
   const handleRoll = () => {
-    const newDuration = generateRandomDuration();
+    const newDuration = generateRandomDuration(range);
     setDuration(newDuration);
     timer?.set(newDuration);
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: "center" }}>
+      <Button
+        size="lg"
+        colorScheme="teal"
+        variant="link"
+        isDisabled={isRunning}
+        className="custom-range-btn"
+        onClick={() => setRangeFormDisplayed(!rangeFormDisplayed)}
+        marginBottom="5"
+      >
+        Customize range
+      </Button>
+      {rangeFormDisplayed && (
+        <CustomRangeForm
+          range={range}
+          setRange={setRange}
+          setRangeFormDisplayed={setRangeFormDisplayed}
+        />
+      )}
+
       <Time milliseconds={duration} format={"MM:SS"} />
-      <ButtonGroup spacing={3} >
+      <ButtonGroup spacing={3}>
         {!isRunning ? (
           <Button
             size="lg"
