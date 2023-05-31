@@ -12,7 +12,7 @@ export default function Home() {
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Flex alignItems="center" justifyContent="center" h='100vh'>
+      <Flex alignItems="center" justifyContent="center" h="100vh">
         <Timer updateTitleDuration={setTitleDuration} useWorker />
       </Flex>
     </>
