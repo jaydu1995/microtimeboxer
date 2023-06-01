@@ -10,6 +10,7 @@ import formatMS from "@/utils/formatMS";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import CustomRangeForm from "./CustomRangeForm";
 import { TimerRange } from "./TimerRangeSchema";
+import { getSettings } from "@/utils/localStorageUtils";
 
 export interface TimerProps {
   updateTitleDuration?: Dispatch<SetStateAction<string>>;
@@ -29,6 +30,8 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   };
 
   useEffect(() => {
+    const userSettings = getSettings();
+    userSettings ? setRange(userSettings.timerRange) : null;
     setDuration(generateRandomDuration(range));
   }, []);
 

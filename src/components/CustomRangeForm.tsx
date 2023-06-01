@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip } from "react-tooltip";
 import { Button } from "@chakra-ui/react";
 import { TimerRange, TimerRangeSchema } from "./TimerRangeSchema";
+import { saveSettings } from "@/utils/localStorageUtils";
 
 export interface CustomRangeFormProps {
   range: TimerRange;
@@ -24,6 +25,7 @@ export default function CustomRangeForm({
   const onSubmit = handleSubmit((data) => {
     setRangeFormDisplayed(false);
     setRange(data);
+    saveSettings({ timerRange: data });
   });
 
   return (
