@@ -1,36 +1,51 @@
-import type { Dispatch, ReactElement, SetStateAction } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Tooltip } from "react-tooltip";
 import { Button } from "@chakra-ui/react";
-import { TimerRange, TimerRangeSchema } from "./TimerRangeSchema";
 import { saveSettings } from "@/utils/localStorageUtils";
+import { TimerRange } from "@/types/TimerRangeSchema";
+import { UserSettings, UserSettingsSchema } from "@/types/UserSettings";
 
-export interface CustomRangeFormProps {
+export interface SettingsFormProps {
   range: TimerRange;
   setRange: Dispatch<SetStateAction<TimerRange>>;
-  setRangeFormDisplayed: Dispatch<SetStateAction<boolean>>;
+  setSettingsDisplayed: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function CustomRangeForm({
+export default function SettingsForm({
   range,
   setRange,
-  setRangeFormDisplayed,
-}: CustomRangeFormProps): ReactElement {
+  setSettingsDisplayed,
+}: SettingsFormProps): ReactElement {
   const {
     formState: { errors },
     register,
     handleSubmit,
-  } = useForm<TimerRange>({ resolver: zodResolver(TimerRangeSchema) });
+    reset,
+  } = useForm<UserSettings>({ resolver: zodResolver(UserSettingsSchema) });
   const onSubmit = handleSubmit((data) => {
-    setRangeFormDisplayed(false);
-    setRange(data);
-    saveSettings({ timerRange: data });
+    setSettingsDisplayed(false);
+    setRange(data.timerRange);
+    if (data.remember) {
+      saveSettings(data);
+    }
   });
+  const handleReset = () => {
+    reset({ timerRange: { min: 1, max: 6 } });
+  };
 
   return (
     <>
       <form onSubmit={onSubmit} noValidate>
+        <Button
+          onClick={handleReset}
+          size="xs"
+          colorScheme="gray"
+          variant="link"
+        >
+          Reset
+        </Button>
         <div style={{ display: "flex", justifyContent: "space-around" }}>
           <div
             style={{
@@ -58,10 +73,10 @@ export default function CustomRangeForm({
                 border: "1px solid black",
               }}
               data-tooltip-id="error"
-              data-tooltip-content={errors.min?.message}
+              data-tooltip-content={errors.timerRange?.min?.message}
               data-tooltip-place="bottom"
               data-tooltip-variant="error"
-              {...register("min", { valueAsNumber: true })}
+              {...register("timerRange.min", { valueAsNumber: true })}
             />
             <span style={{ marginTop: "0.5rem", fontSize: "14px" }}>
               minutes
@@ -93,24 +108,34 @@ export default function CustomRangeForm({
                 border: "1px solid black",
               }}
               data-tooltip-id="error"
-              data-tooltip-content={errors.max?.message}
+              data-tooltip-content={errors.timerRange?.max?.message}
               data-tooltip-place="bottom"
               data-tooltip-variant="error"
-              {...register("max", { valueAsNumber: true })}
+              {...register("timerRange.max", { valueAsNumber: true })}
             />
             <span style={{ marginTop: "0.5rem", fontSize: "14px" }}>
               minutes
             </span>
           </div>
         </div>
-
+        <div className="div">
+          <input
+            style={{ margin: "0.4rem", marginBottom: "0.8rem" }}
+            type="checkbox"
+            id="remember"
+            {...register("remember")}
+          />
+          <label style={{ fontSize: "12px" }} htmlFor="remember">
+            Remember settings
+          </label>
+        </div>
         <Button colorScheme="teal" variant="link" type="submit">
           OK
         </Button>
         <Button
-          colorScheme="blackAlpha"
+          colorScheme="red"
           variant="link"
-          onClick={() => setRangeFormDisplayed(false)}
+          onClick={() => setSettingsDisplayed(false)}
         >
           Cancel
         </Button>
