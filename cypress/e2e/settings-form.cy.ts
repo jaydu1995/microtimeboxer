@@ -1,4 +1,4 @@
-describe("Custom timer range form", () => {
+describe("Settings form", () => {
   const outOfRangeNum = "26";
   const decimalNum = "6.5";
   const notNum = "Three";
@@ -11,9 +11,8 @@ describe("Custom timer range form", () => {
     // Wait for Next JS to hydrate the page
     cy.wait(1000);
 
-    cy.get(".custom-range-btn").click();
+    cy.get(".settings-btn").click();
   }),
-
     it("should not accept numbers outside of range", () => {
       // Minimum should not be outside of range
       cy.get("#min-range-input").clear().type(outOfRangeNum);
@@ -26,7 +25,6 @@ describe("Custom timer range form", () => {
       cy.contains("OK").click();
       cy.contains(maximumErrorMSG).should("exist");
     }),
-
     it("should not accept non-whole numbers", () => {
       // Minimum should not be a non-whole number
       cy.get("#min-range-input").clear().type(decimalNum);
@@ -39,7 +37,6 @@ describe("Custom timer range form", () => {
       cy.contains("OK").click();
       cy.contains(maximumErrorMSG).should("exist");
     }),
-
     it("should not accept non-numerical characters", () => {
       // Minimum should not contain non-numerical characters
       cy.get("#min-range-input").clear().type(notNum);
@@ -52,7 +49,6 @@ describe("Custom timer range form", () => {
       cy.contains("OK").click();
       cy.contains(maximumErrorMSG).should("exist");
     }),
-
     it("should accept a whole number inside of range", () => {
       // Valid number shouldn't produce any errors
       cy.get("#min-range-input").clear().type(validNum);
@@ -60,5 +56,27 @@ describe("Custom timer range form", () => {
       cy.contains("OK").click();
       cy.contains(minimumErrorMSG).should("not.exist");
       cy.contains(maximumErrorMSG).should("not.exist");
+    }),
+    it("should reset minimum and maximum when reset button is clicked", () => {
+      cy.get("#min-range-input").clear().type("7");
+      cy.get("#max-range-input").clear().type("7");
+      cy.contains("Reset").click();
+      cy.get("#min-range-input").should("have.value", "1");
+      cy.get("#max-range-input").should("have.value", "6");
+    }),
+    it("should not save settings if remember isn't checked", () => {
+      cy.get("#min-range-input").clear().type("7");
+      cy.get("#max-range-input").clear().type("7");
+      cy.contains("OK").click();
+      cy.reload();
+      cy.get(".time").should("not.have.text", "07:00");
+    }),
+    it("should save settings if remember is checked", () => {
+      cy.get("#min-range-input").clear().type("7");
+      cy.get("#max-range-input").clear().type("7");
+      cy.get("#remember").click();
+      cy.contains("OK").click();
+      cy.reload();
+      cy.get(".time").should("have.text", "07:00");
     });
 });
