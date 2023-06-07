@@ -1,4 +1,4 @@
-import { UserSettings } from "@/components/TimerRangeSchema";
+import { UserSettings } from "@/types/UserSettings";
 
 export const saveSettings = (settings: UserSettings) => {
   localStorage.setItem("settings", JSON.stringify(settings));
