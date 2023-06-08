@@ -8,6 +8,7 @@ import TimerClass from "@/utils/TimerClass";
 import randomNum from "@/utils/randomNum";
 import formatMS from "@/utils/formatMS";
 import { Button, ButtonGroup } from "@chakra-ui/react";
+
 import SettingsForm from "./SettingsForm";
 import { getSettings } from "@/utils/localStorageUtils";
 import { TimerRange } from "@/types/TimerRangeSchema";
@@ -22,6 +23,7 @@ export function Timer({ updateTitleDuration, useWorker }: TimerProps) {
   const [duration, setDuration] = useState(180000);
   const [timer, setTimer] = useState<TimerClass | null>(null);
   const [range, setRange] = useState<TimerRange>({ min: 1, max: 6 });
+  
   const [settingsDisplayed, setSettingsDisplayed] = useState(false);
   const [playAlarm] = useSound(alarm);
 

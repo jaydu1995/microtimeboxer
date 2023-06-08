@@ -6,6 +6,7 @@ Right now the app is in it's earliest stage of development, as such the only fea
 ## Roadmap
 The following will not necessarily be completed in order:
 
+
 - [] Account creation.
 - [x] Ability for users to customize the range of time they will receive a random timer for.
 - [] Ability for users to create tasks.
